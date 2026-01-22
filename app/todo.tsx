@@ -24,14 +24,14 @@ export default function ToDoPage() {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(true);
-  const [editVisible, setEditVisible] = useState(false);
+  const [popup, setPopup] = useState(false);
   const [editTodo, setEditTodo] = useState<Todo | null>(null);
   const [editText, setEditText] = useState("");
 
   function openEdit(todo: Todo) {
     setEditTodo(todo);
     setEditText(todo.title);
-    setEditVisible(true);
+    setPopup(true);
   }
 
   async function saveEdit() {
@@ -44,7 +44,7 @@ export default function ToDoPage() {
     setTodos(updatedTodos);
     await AsyncStorage.setItem("todos", JSON.stringify(updatedTodos));
 
-    setEditVisible(false);
+    setPopup(false);
     setEditTodo(null);
     setEditText("");
   }
@@ -153,8 +153,8 @@ export default function ToDoPage() {
 
           <Portal>
             <Modal
-              visible={editVisible}
-              onDismiss={() => setEditVisible(false)}
+              visible={popup}
+              onDismiss={() => setPopup(false)}
               contentContainerStyle={{
                 margin: 20,
                 borderRadius: 12,
@@ -183,7 +183,7 @@ export default function ToDoPage() {
                     marginTop: 16,
                   }}
                 >
-                  <Button onPress={() => setEditVisible(false)}>Cancel</Button>
+                  <Button onPress={() => setPopup(false)}>Cancel</Button>
                   <Button onPress={saveEdit} disabled={!editText.trim()}>
                     Save
                   </Button>
